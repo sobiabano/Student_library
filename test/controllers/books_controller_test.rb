@@ -5,6 +5,6 @@ class BooksControllerTest < ActionDispatch::IntegrationTest
     get root_path
 
     assert_response :success
-    assert_select "h1", text: "Student library"
+    assert_select "h1", text: "Student Library"
   end
 end
