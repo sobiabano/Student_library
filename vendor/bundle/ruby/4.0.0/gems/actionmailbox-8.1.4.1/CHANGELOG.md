@@ -1,0 +1,46 @@
+## Rails 8.1.4.1 (November 03, 2026) ##
+
+*   Reject Mailgun inbound emails whose timestamp is more than 2 minutes ahead
+    of local time.
+
+    [GHSA-5957-c7qm-m469]
+
+    *Mike Dalessio*
+
+## Rails 8.1.4 (September 24, 2026) ##
+
+*   No changes.
+
+
+## Rails 8.1.3.1 (July 29, 2026) ##
+
+*   No changes.
+
+
+## Rails 8.1.3 (March 24, 2026) ##
+
+*   No changes.
+
+
+## Rails 8.1.2.1 (March 23, 2026) ##
+
+*   No changes.
+
+
+## Rails 8.1.2 (January 08, 2026) ##
+
+*   No changes.
+
+
+## Rails 8.1.1 (October 28, 2025) ##
+
+*   No changes.
+
+
+## Rails 8.1.0 (October 22, 2025) ##
+
+*   Add `reply_to_address` extension method on `Mail::Message`.
+
+    *Mr0grog*
+
+Please check [8-0-stable](https://github.com/rails/rails/blob/8-0-stable/actionmailbox/CHANGELOG.md) for previous changes.

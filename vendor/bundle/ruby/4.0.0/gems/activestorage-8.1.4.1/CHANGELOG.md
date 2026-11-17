@@ -1,0 +1,408 @@
+## Rails 8.1.4.1 (November 03, 2026) ##
+
+*   Preserve committed proxy responses when a storage error interrupts a
+    streamed download.
+
+    [GHSA-4v2w-w6g6-f8f8]
+
+    *Jeremy Daer*
+
+*   Derive `ActiveStorage::Filename#base` and `#extension` from the sanitized
+    filename.
+
+    This prevents null bytes and invalid byte sequences in stored filename
+    metadata from raising when a blob is opened or represented. Existing blob
+    records are handled without a data migration.
+
+    [GHSA-p2pm-g2h6-7j5j]
+
+    *Jeremy Daer*
+
+*   Ship an ImageMagick security policy and apply it to every ImageMagick
+    process MiniMagick spawns.
+
+    ImageMagick chooses a coder from the content of the file it is given, and
+    some coders act on files named inside the image rather than on the image
+    itself. Active Storage constrained none of them, so an uploaded file could
+    reach any coder the host's policy allowed, through the ImageMagick analyzer
+    at attach time, with no variant or `analyze` call in the application.
+
+    Active Storage now ships a `policy.xml` in
+    `ActiveStorage::ImageMagick::POLICY_DIRECTORY` and prepends that directory
+    to `MAGICK_CONFIGURE_PATH` through `MiniMagick.cli_env`. ImageMagick applies
+    every policy file on its search path, so the shipped policy adds to the
+    host's policy rather than replacing it. A `MAGICK_CONFIGURE_PATH` set in the
+    environment or in `MiniMagick.cli_env`, including by an initializer or
+    dotenv, is kept after the shipped directory.
+
+    The shipped policy denies the coders that script ImageMagick (`MSL`), read
+    or delete files other than the image (`TEXT`, `EPHEMERAL`), fetch remote
+    references (`URL`, `HTTP`, `HTTPS`, `FTP`), display to a screen (`SHOW`,
+    `WIN`, `PLT`), or hand the file to Ghostscript (the `PS`, `EPS`, `EPT` and
+    `PDF` coders, every alias of them, and the `gs` delegate), or reach a file
+    directly (`FILE`, `MPC`, `XPS`, `PCL`), and it refuses `@filename`
+    indirection. The policy applies to every ImageMagick command MiniMagick
+    runs, not only Active Storage's.
+
+    These applications must act:
+
+    *   One whose variant processor is `:mini_magick` has to use mini_magick 5.1
+        or later, which applying the policy requires. With an older mini_magick,
+        it raises at boot.
+    *   One that renders PostScript or PDF through ImageMagick has to re-allow
+        the `gs` delegate and the coders it uses in the host's `policy.xml`. A
+        host policy that allows a coder overrides the shipped deny.
+    *   One that replaces `MiniMagick.cli_env` after it boots, clears the
+        environment with `MiniMagick.cli_prefix`, or installs its own
+        `MiniMagick::Shell` never receives the shipped policy and has to carry
+        its rules in ImageMagick's system policy. So does one that uses
+        GraphicsMagick, which does not read ImageMagick policies.
+
+    Every other application needs no change. See "ImageMagick Security Policy"
+    in the Active Storage guide.
+
+    [GHSA-f3w6-w445-fwh9]
+
+    *Mike Dalessio*
+
+*   Enforce the declared content length on Google Cloud Storage direct uploads.
+
+    The signed URL now requires an `x-goog-content-length-range` header matching the blob's
+    `byte_size`, so Cloud Storage rejects a body of any other size.
+
+    Browsers send the new header, so a bucket's CORS configuration must list
+    `x-goog-content-length-range` in `responseHeader`, or direct uploads from the browser fail.
+
+    [GHSA-hfr4-8rjc-97m2]
+
+    *Mike Dalessio*
+
+*   Sign GCS direct uploads with V2 when `cache_control` is set.
+
+    V4 signatures did not bind the Content-Type or Content-MD5 headers, so the uploader could
+    choose the stored Content-Type. Direct-upload URLs with `cache_control` are no longer limited
+    to 7 days, and the client sends `Cache-Control` unsigned.
+
+    [GHSA-3w93-6hmw-whh4]
+
+    *Mike Dalessio*
+
+*   Stop an uploaded filename choosing the extension of the tempfile Active
+    Storage hands to an external tool.
+
+    `ActiveStorage::Blob#open` named its tempfile after the uploaded filename,
+    extension and all. Tools that select a decoder from the extension alone,
+    such as FFmpeg's AviSynth demuxer on `.avs`, therefore took their
+    instructions from the uploader. The extension is now kept only when it
+    denotes the blob's recorded media type, and dropped otherwise.
+
+    [GHSA-v924-7rp8-4mxh]
+
+    *Mike Dalessio*
+
+*   Restrict the formats ffmpeg and ffprobe will open when previewing and
+    analyzing video and audio.
+
+    Active Storage now passes `-format_whitelist` before the input at every
+    ffmpeg and ffprobe call site, limiting demuxer selection to common audio and
+    video container formats. Configure the list with
+    `config.active_storage.ffmpeg_allowed_formats`, or set it to `nil` to let
+    ffmpeg choose any demuxer it was built with.
+
+    Files in other formats, such as MXF, DV, AC3, WavPack, AU, W64, and raw
+    H.264 or MPEG-1/2 video streams, now fail to preview with
+    `ActiveStorage::PreviewError`, and their analysis stores no media metadata
+    and logs a warning. Add their demuxers to the list to keep them.
+
+    ```ruby
+    config.active_storage.ffmpeg_allowed_formats += %w[ mxf ]
+    ```
+
+    [GHSA-3f4q-8x5m-76v8]
+
+    *Mike Dalessio*
+
+## Rails 8.1.4 (September 24, 2026) ##
+
+*   Warn instead of aborting boot when `image_processing` 2.x is installed without `ruby-vips`
+    or `mini_magick`.
+
+    Both gems became soft dependencies in `image_processing` 2.0, and the `LoadError` raised for
+    a missing one names that gem instead of `image_processing`. Active Storage did not recognize
+    the message, so it re-raised rather than logging its usual warning.
+
+    Fixes #58413.
+
+    *Janko Marohnić*
+
+*   Fix `MirrorService#mirror` losing blob metadata when copying to mirrors.
+
+    Mirrored copies on S3, Azure, and GCS were served as `application/octet-stream`
+    because `content_type`, `filename`, `disposition`, and `custom_metadata` were
+    dropped. Forward the blob's `service_metadata` to each mirror's upload.
+
+    Fixes #57270.
+
+    *Maksim Romanov* + *Andrii Furmanets*
+
+*   Prevent `ActiveStorage.touch_attachment_records = false` from crashing the attachment of a Blob.
+
+    When `ActiveStorage.touch_attachment_records` was set to `false`, attaching a existing Blob to a Record
+    would raise an error. This is now fixed.
+
+    *Edouard Chin*
+
+*   Fix `MirrorService#mirror` raising `ActiveStorage::IntegrityError` when
+    mirroring without a checksum (e.g., `track_variants: false`).
+
+    *Denis Savchuk*
+
+*   Preserve attachment changes when converting record to another class using STI.
+
+    *fatkodima*
+
+*   Correct unexpected behavior resulting from dependent: :purge when using
+    has_one_attached or has_many_attached. Fixes #36423.
+
+    *Mark Oveson*
+
+*   Define `as_json` on `ActiveStorage::Attached::One` and `ActiveStorage::Attached::Many`.
+
+    The proxies hold a back-reference to the owning record in `@record`. Without an explicit
+    `as_json`, the default `Object#as_json` fall back serialized `instance_values`, which made
+    `record.to_json` recurse infinitely whenever the attached name collided with a model
+    attribute (e.g. an `ignored_columns` column brought back by `select('*')`).
+
+    `Attached::One#as_json` now returns the attachment record's JSON when attached and `nil`
+    otherwise. `Attached::Many#as_json` returns the attachment records' JSON as an array.
+
+    *Renxiang Cai*
+
+*   Fix Rails hanging when generating video previews
+
+    When Rails runs in a background process group, ffmpeg's attempt to configure the terminal for
+    interactive input would send SIGTTOU to the Rails process, suspending it indefinitely.
+
+    Fixed by explicitly passing /dev/null to ffmpeg's stdin.
+
+    *Jonathan del Strother*
+
+
+## Rails 8.1.3.1 (July 29, 2026) ##
+
+*   Disable libvips's unfuzzed image loaders and savers.
+
+    libvips flags some of its loaders and savers as "unfuzzed" or "untrusted", meaning they are only
+    safe for trusted content. Active Storage will call `Vips.block_untrusted(true)` to disable them
+    while booting. An application that needs a specific loader or saver may re-enable it in an
+    initializer.
+
+    This is a breaking change for applications that process image types with an unfuzzed loader or
+    saver. Variant transformation of BMP, ICO, and PSD attachments will raise `Vips::Error`, and
+    analysis of these and other types such as SVG, JPEG XL, JPEG 2000, and Netpbm will no longer
+    record `width` and `height`. Requesting an unfuzzed output format, typically FITS, JXL, or
+    anything delegated to ImageMagick, will also raise `Vips::Error`. Attaching, storing, and
+    downloading are unchanged.
+
+    An application seeing `Vips::Error` raised during image transformation may wish to remove the
+    affected content types from `config.active_storage.variable_content_types` in an initializer.
+    Active Storage will then treat those attachments as not variable and will not generate variants
+    for them. This most often matters to an application that transforms images during a request
+    rather than in a background job, where the failure surfaces as an error response instead of a
+    failed job.
+
+    ```ruby
+    Rails.application.config.active_storage.variable_content_types -=
+      %w[ image/bmp image/vnd.microsoft.icon image/vnd.adobe.photoshop ]
+    ```
+
+    Applications using the `:mini_magick` variant processor will see no change in how their
+    attachments are processed, but the loaders and savers will be disabled process-wide whenever
+    ruby-vips is installed, and the version requirements below will still apply. Such an application
+    may remove ruby-vips from its Gemfile to avoid both.
+
+    The minimum supported version of libvips is now 8.13, and the minimum supported version of
+    ruby-vips is now 2.2.1. These are the earliest versions that are capable of disabling untrusted
+    operations. When ruby-vips is installed and either minimum is not met, Active Storage will raise
+    a `RuntimeError` while booting rather than run in an unsecurable environment.
+
+    [GHSA-xr9x-r78c-5hrm]
+    [CVE-2026-66066]
+
+    *Mike Dalessio*
+
+
+## Rails 8.1.3 (March 24, 2026) ##
+
+*   Fix `ActiveStorage::Blob` content type predicate methods to handle `nil`.
+
+    *Daichi KUDO*
+
+
+## Rails 8.1.2.1 (March 23, 2026) ##
+
+*   Filter user supplied metadata in DirectUploadController
+
+    [CVE-2026-33173]
+
+    *Jean Boussier*
+
+*   Configurable maxmimum streaming chunk size
+
+    Makes sure that byte ranges for blobs don't exceed 100mb by default.
+    Content ranges that are too big can result in denial of service.
+
+    [CVE-2026-33174]
+
+    *Gannon McGibbon*
+
+*   Limit range requests to a single range
+
+    [CVE-2026-33658]
+
+    *Jean Boussier*
+
+
+*   Prevent path traversal in `DiskService`.
+
+    `DiskService#path_for` now raises an `InvalidKeyError` when passed keys with dot segments (".",
+    ".."), or if the resolved path is outside the storage root directory.
+
+    `#path_for` also now consistently raises `InvalidKeyError` if the key is invalid in any way, for
+    example containing null bytes or having an incompatible encoding. Previously, the exception
+    raised may have been `ArgumentError` or `Encoding::CompatibilityError`.
+
+    `DiskController` now explicitly rescues `InvalidKeyError` with appropriate HTTP status codes.
+
+    [CVE-2026-33195]
+
+    *Mike Dalessio*
+
+*   Prevent glob injection in `DiskService#delete_prefixed`.
+
+    Escape glob metacharacters in the resolved path before passing to `Dir.glob`.
+
+    Note that this change breaks any existing code that is relying on `delete_prefixed` to expand
+    glob metacharacters. This change presumes that is unintended behavior (as other storage services
+    do not respect these metacharacters).
+
+    [CVE-2026-33202]
+
+    *Mike Dalessio*
+
+
+## Rails 8.1.2 (January 08, 2026) ##
+
+*   Restore ADC when signing URLs with IAM for GCS
+
+    ADC was previously used for automatic authorization when signing URLs with IAM.
+    Now it is again, but the auth client is memoized so that new credentials are only
+    requested when the current ones expire. Other auth methods can now be used
+    instead by setting the authorization on `ActiveStorage::Service::GCSService#iam_client`.
+
+    ```ruby
+    ActiveStorage::Blob.service.iam_client.authorization = Google::Auth::ImpersonatedServiceAccountCredentials.new(options)
+    ```
+
+    This is safer than setting `Google::Apis::RequestOptions.default.authorization`
+    because it only applies to Active Storage and does not affect other Google API
+    clients.
+
+    *Justin Malčić*
+
+
+## Rails 8.1.1 (October 28, 2025) ##
+
+*   No changes.
+
+
+## Rails 8.1.0 (October 22, 2025) ##
+
+*   Add structured events for Active Storage:
+    - `active_storage.service_upload`
+    - `active_storage.service_download`
+    - `active_storage.service_streaming_download`
+    - `active_storage.preview`
+    - `active_storage.service_delete`
+    - `active_storage.service_delete_prefixed`
+    - `active_storage.service_exist`
+    - `active_storage.service_url`
+    - `active_storage.service_mirror`
+
+    *Gannon McGibbon*
+
+*   Allow analyzers and variant transformer to be fully configurable
+
+    ```ruby
+    # ActiveStorage.analyzers can be set to an empty array:
+    config.active_storage.analyzers = []
+    # => ActiveStorage.analyzers = []
+
+    # or use custom analyzer:
+    config.active_storage.analyzers = [ CustomAnalyzer ]
+    # => ActiveStorage.analyzers = [ CustomAnalyzer ]
+    ```
+
+    If no configuration is provided, it will use the default analyzers.
+
+    You can also disable variant processor to remove warnings on startup about missing gems.
+
+    ```ruby
+    config.active_storage.variant_processor = :disabled
+    ```
+
+    *zzak*, *Alexandre Ruban*
+
+*   Remove deprecated `:azure` storage service.
+
+    *Rafael Mendonça França*
+
+*   Remove unnecessary calls to the GCP metadata server.
+
+    Calling Google::Auth.get_application_default triggers an explicit call to
+    the metadata server - given it was being called for significant number of
+    file operations, it can lead to considerable tail latencies and even metadata
+    server overloads. Instead, it's preferable (and significantly more efficient)
+    that applications use:
+
+    ```ruby
+    Google::Apis::RequestOptions.default.authorization = Google::Auth.get_application_default(...)
+    ```
+
+    In the cases applications do not set that, the GCP libraries automatically determine credentials.
+
+    This also enables using credentials other than those of the associated GCP
+    service account like when using impersonation.
+
+    *Alex Coomans*
+
+*   Direct upload progress accounts for server processing time.
+
+    *Jeremy Daer*
+
+*   Delegate `ActiveStorage::Filename#to_str` to `#to_s`
+
+    Supports checking String equality:
+
+    ```ruby
+    filename = ActiveStorage::Filename.new("file.txt")
+    filename == "file.txt" # => true
+    filename in "file.txt" # => true
+    "file.txt" == filename # => true
+    ```
+
+    *Sean Doyle*
+
+*   A Blob will no longer autosave associated Attachment.
+
+    This fixes an issue where a record with an attachment would have
+    its dirty attributes reset, preventing your `after commit` callbacks
+    on that record to behave as expected.
+
+    Note that this change doesn't require any changes on your application
+    and is supposed to be internal. Active Storage Attachment will continue
+    to be autosaved (through a different relation).
+
+    *Edouard-chin*
+
+Please check [8-0-stable](https://github.com/rails/rails/blob/8-0-stable/activestorage/CHANGELOG.md) for previous changes.

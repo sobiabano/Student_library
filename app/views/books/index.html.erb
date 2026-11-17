@@ -1,0 +1,9 @@
+<h1>Student Library</h1>
+<h2>Welcome to the Student Digital Library</h2>
+<p>Choose a book to start reading</p>
+
+<div class="book-grid">
+  <% @books.each do |book| %>
+    <%= render "book_card", book: book %>
+  <% end %>
+</div>

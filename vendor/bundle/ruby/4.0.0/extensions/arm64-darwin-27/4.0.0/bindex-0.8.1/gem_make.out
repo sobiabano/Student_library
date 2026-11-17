@@ -1,0 +1,19 @@
+current directory: /Users/sobiabano/Library/CloudStorage/GoogleDrive-sobia.bano@ucdconnect.ie/My Drive/Data/Undergrad_Module/CAD2026/Lec 09/student_library/vendor/bundle/ruby/4.0.0/gems/bindex-0.8.1/ext/skiptrace
+/opt/homebrew/opt/ruby/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /Users/sobiabano/Library/CloudStorage/GoogleDrive-sobia.bano@ucdconnect.ie/My Drive/Data/Undergrad_Module/CAD2026/Lec 09/student_library/vendor/bundle/ruby/4.0.0/gems/bindex-0.8.1/ext/skiptrace
+make DESTDIR\= sitearchdir\=./.gem.20261117-25276-kozjij sitelibdir\=./.gem.20261117-25276-kozjij clean
+
+current directory: /Users/sobiabano/Library/CloudStorage/GoogleDrive-sobia.bano@ucdconnect.ie/My Drive/Data/Undergrad_Module/CAD2026/Lec 09/student_library/vendor/bundle/ruby/4.0.0/gems/bindex-0.8.1/ext/skiptrace
+make DESTDIR\= sitearchdir\=./.gem.20261117-25276-kozjij sitelibdir\=./.gem.20261117-25276-kozjij
+compiling cruby.c
+linking shared-object skiptrace/internal/cruby.bundle
+ld: warning: search path '/opt/homebrew/Cellar/openssl@4/4.0.3/lib' not found
+
+current directory: /Users/sobiabano/Library/CloudStorage/GoogleDrive-sobia.bano@ucdconnect.ie/My Drive/Data/Undergrad_Module/CAD2026/Lec 09/student_library/vendor/bundle/ruby/4.0.0/gems/bindex-0.8.1/ext/skiptrace
+make DESTDIR\= sitearchdir\=./.gem.20261117-25276-kozjij sitelibdir\=./.gem.20261117-25276-kozjij install
+/usr/bin/install -c -m 0755 cruby.bundle ./.gem.20261117-25276-kozjij/skiptrace/internal
+
+current directory: /Users/sobiabano/Library/CloudStorage/GoogleDrive-sobia.bano@ucdconnect.ie/My Drive/Data/Undergrad_Module/CAD2026/Lec 09/student_library/vendor/bundle/ruby/4.0.0/gems/bindex-0.8.1/ext/skiptrace
+make DESTDIR\= sitearchdir\=./.gem.20261117-25276-kozjij sitelibdir\=./.gem.20261117-25276-kozjij clean

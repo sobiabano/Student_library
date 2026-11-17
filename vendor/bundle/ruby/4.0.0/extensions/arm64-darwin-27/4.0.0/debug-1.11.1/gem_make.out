@@ -1,0 +1,20 @@
+current directory: /Users/sobiabano/Library/CloudStorage/GoogleDrive-sobia.bano@ucdconnect.ie/My Drive/Data/Undergrad_Module/CAD2026/Lec 09/student_library/vendor/bundle/ruby/4.0.0/gems/debug-1.11.1/ext/debug
+/opt/homebrew/opt/ruby/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /Users/sobiabano/Library/CloudStorage/GoogleDrive-sobia.bano@ucdconnect.ie/My Drive/Data/Undergrad_Module/CAD2026/Lec 09/student_library/vendor/bundle/ruby/4.0.0/gems/debug-1.11.1/ext/debug
+make -j3 DESTDIR\= sitearchdir\=./.gem.20261117-25276-6tr0ik sitelibdir\=./.gem.20261117-25276-6tr0ik clean
+
+current directory: /Users/sobiabano/Library/CloudStorage/GoogleDrive-sobia.bano@ucdconnect.ie/My Drive/Data/Undergrad_Module/CAD2026/Lec 09/student_library/vendor/bundle/ruby/4.0.0/gems/debug-1.11.1/ext/debug
+make -j3 DESTDIR\= sitearchdir\=./.gem.20261117-25276-6tr0ik sitelibdir\=./.gem.20261117-25276-6tr0ik
+compiling debug.c
+compiling iseq_collector.c
+linking shared-object debug/debug.bundle
+ld: warning: search path '/opt/homebrew/Cellar/openssl@4/4.0.3/lib' not found
+
+current directory: /Users/sobiabano/Library/CloudStorage/GoogleDrive-sobia.bano@ucdconnect.ie/My Drive/Data/Undergrad_Module/CAD2026/Lec 09/student_library/vendor/bundle/ruby/4.0.0/gems/debug-1.11.1/ext/debug
+make -j3 DESTDIR\= sitearchdir\=./.gem.20261117-25276-6tr0ik sitelibdir\=./.gem.20261117-25276-6tr0ik install
+/usr/bin/install -c -m 0755 debug.bundle ./.gem.20261117-25276-6tr0ik/debug
+
+current directory: /Users/sobiabano/Library/CloudStorage/GoogleDrive-sobia.bano@ucdconnect.ie/My Drive/Data/Undergrad_Module/CAD2026/Lec 09/student_library/vendor/bundle/ruby/4.0.0/gems/debug-1.11.1/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20261117-25276-6tr0ik sitelibdir\=./.gem.20261117-25276-6tr0ik clean

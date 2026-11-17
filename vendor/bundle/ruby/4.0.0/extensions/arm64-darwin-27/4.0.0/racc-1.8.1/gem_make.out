@@ -1,0 +1,19 @@
+current directory: /Users/sobiabano/Library/CloudStorage/GoogleDrive-sobia.bano@ucdconnect.ie/My Drive/Data/Undergrad_Module/CAD2026/Lec 09/student_library/vendor/bundle/ruby/4.0.0/gems/racc-1.8.1/ext/racc/cparse
+/opt/homebrew/opt/ruby/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /Users/sobiabano/Library/CloudStorage/GoogleDrive-sobia.bano@ucdconnect.ie/My Drive/Data/Undergrad_Module/CAD2026/Lec 09/student_library/vendor/bundle/ruby/4.0.0/gems/racc-1.8.1/ext/racc/cparse
+make -j3 DESTDIR\= sitearchdir\=./.gem.20261117-25276-kottlh sitelibdir\=./.gem.20261117-25276-kottlh clean
+
+current directory: /Users/sobiabano/Library/CloudStorage/GoogleDrive-sobia.bano@ucdconnect.ie/My Drive/Data/Undergrad_Module/CAD2026/Lec 09/student_library/vendor/bundle/ruby/4.0.0/gems/racc-1.8.1/ext/racc/cparse
+make -j3 DESTDIR\= sitearchdir\=./.gem.20261117-25276-kottlh sitelibdir\=./.gem.20261117-25276-kottlh
+compiling cparse.c
+linking shared-object racc/cparse.bundle
+ld: warning: search path '/opt/homebrew/Cellar/openssl@4/4.0.3/lib' not found
+
+current directory: /Users/sobiabano/Library/CloudStorage/GoogleDrive-sobia.bano@ucdconnect.ie/My Drive/Data/Undergrad_Module/CAD2026/Lec 09/student_library/vendor/bundle/ruby/4.0.0/gems/racc-1.8.1/ext/racc/cparse
+make -j3 DESTDIR\= sitearchdir\=./.gem.20261117-25276-kottlh sitelibdir\=./.gem.20261117-25276-kottlh install
+/usr/bin/install -c -m 0755 cparse.bundle ./.gem.20261117-25276-kottlh/racc
+
+current directory: /Users/sobiabano/Library/CloudStorage/GoogleDrive-sobia.bano@ucdconnect.ie/My Drive/Data/Undergrad_Module/CAD2026/Lec 09/student_library/vendor/bundle/ruby/4.0.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20261117-25276-kottlh sitelibdir\=./.gem.20261117-25276-kottlh clean

@@ -1,0 +1,9 @@
+<article class="book-card">
+  <div class="book-cover" aria-hidden="true">BOOK</div>
+  <div class="card-content">
+    <h2><%= link_to book.title, book_path(book) %></h2>
+    <p class="byline">By <%= book.author %></p>
+    <p><%= short_summary(book) %></p>
+    <%= link_to "View book", book_path(book), class: "text-link" %>
+  </div>
+</article>

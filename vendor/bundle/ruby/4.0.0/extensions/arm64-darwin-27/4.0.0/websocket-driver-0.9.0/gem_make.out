@@ -1,0 +1,19 @@
+current directory: /Users/sobiabano/Library/CloudStorage/GoogleDrive-sobia.bano@ucdconnect.ie/My Drive/Data/Undergrad_Module/CAD2026/Lec 09/student_library/vendor/bundle/ruby/4.0.0/gems/websocket-driver-0.9.0/ext/websocket-driver
+/opt/homebrew/opt/ruby/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /Users/sobiabano/Library/CloudStorage/GoogleDrive-sobia.bano@ucdconnect.ie/My Drive/Data/Undergrad_Module/CAD2026/Lec 09/student_library/vendor/bundle/ruby/4.0.0/gems/websocket-driver-0.9.0/ext/websocket-driver
+make -j3 DESTDIR\= sitearchdir\=./.gem.20261117-25276-tmkad3 sitelibdir\=./.gem.20261117-25276-tmkad3 clean
+
+current directory: /Users/sobiabano/Library/CloudStorage/GoogleDrive-sobia.bano@ucdconnect.ie/My Drive/Data/Undergrad_Module/CAD2026/Lec 09/student_library/vendor/bundle/ruby/4.0.0/gems/websocket-driver-0.9.0/ext/websocket-driver
+make -j3 DESTDIR\= sitearchdir\=./.gem.20261117-25276-tmkad3 sitelibdir\=./.gem.20261117-25276-tmkad3
+compiling websocket_mask.c
+linking shared-object websocket_mask.bundle
+ld: warning: search path '/opt/homebrew/Cellar/openssl@4/4.0.3/lib' not found
+
+current directory: /Users/sobiabano/Library/CloudStorage/GoogleDrive-sobia.bano@ucdconnect.ie/My Drive/Data/Undergrad_Module/CAD2026/Lec 09/student_library/vendor/bundle/ruby/4.0.0/gems/websocket-driver-0.9.0/ext/websocket-driver
+make -j3 DESTDIR\= sitearchdir\=./.gem.20261117-25276-tmkad3 sitelibdir\=./.gem.20261117-25276-tmkad3 install
+/usr/bin/install -c -m 0755 websocket_mask.bundle ./.gem.20261117-25276-tmkad3
+
+current directory: /Users/sobiabano/Library/CloudStorage/GoogleDrive-sobia.bano@ucdconnect.ie/My Drive/Data/Undergrad_Module/CAD2026/Lec 09/student_library/vendor/bundle/ruby/4.0.0/gems/websocket-driver-0.9.0/ext/websocket-driver
+make DESTDIR\= sitearchdir\=./.gem.20261117-25276-tmkad3 sitelibdir\=./.gem.20261117-25276-tmkad3 clean

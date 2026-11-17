@@ -1,0 +1,20 @@
+current directory: /Users/sobiabano/Library/CloudStorage/GoogleDrive-sobia.bano@ucdconnect.ie/My Drive/Data/Undergrad_Module/CAD2026/Lec 09/student_library/vendor/bundle/ruby/4.0.0/gems/erb-6.0.7/ext/erb/escape
+/opt/homebrew/opt/ruby/bin/ruby extconf.rb
+checking for rb_ext_ractor_safe() in ruby.h... yes
+creating Makefile
+
+current directory: /Users/sobiabano/Library/CloudStorage/GoogleDrive-sobia.bano@ucdconnect.ie/My Drive/Data/Undergrad_Module/CAD2026/Lec 09/student_library/vendor/bundle/ruby/4.0.0/gems/erb-6.0.7/ext/erb/escape
+make DESTDIR\= sitearchdir\=./.gem.20261117-25276-pkm3jr sitelibdir\=./.gem.20261117-25276-pkm3jr clean
+
+current directory: /Users/sobiabano/Library/CloudStorage/GoogleDrive-sobia.bano@ucdconnect.ie/My Drive/Data/Undergrad_Module/CAD2026/Lec 09/student_library/vendor/bundle/ruby/4.0.0/gems/erb-6.0.7/ext/erb/escape
+make DESTDIR\= sitearchdir\=./.gem.20261117-25276-pkm3jr sitelibdir\=./.gem.20261117-25276-pkm3jr
+compiling escape.c
+linking shared-object erb/escape.bundle
+ld: warning: search path '/opt/homebrew/Cellar/openssl@4/4.0.3/lib' not found
+
+current directory: /Users/sobiabano/Library/CloudStorage/GoogleDrive-sobia.bano@ucdconnect.ie/My Drive/Data/Undergrad_Module/CAD2026/Lec 09/student_library/vendor/bundle/ruby/4.0.0/gems/erb-6.0.7/ext/erb/escape
+make DESTDIR\= sitearchdir\=./.gem.20261117-25276-pkm3jr sitelibdir\=./.gem.20261117-25276-pkm3jr install
+/usr/bin/install -c -m 0755 escape.bundle ./.gem.20261117-25276-pkm3jr/erb
+
+current directory: /Users/sobiabano/Library/CloudStorage/GoogleDrive-sobia.bano@ucdconnect.ie/My Drive/Data/Undergrad_Module/CAD2026/Lec 09/student_library/vendor/bundle/ruby/4.0.0/gems/erb-6.0.7/ext/erb/escape
+make DESTDIR\= sitearchdir\=./.gem.20261117-25276-pkm3jr sitelibdir\=./.gem.20261117-25276-pkm3jr clean
